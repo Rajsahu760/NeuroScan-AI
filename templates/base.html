@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Brain Tumor Detection{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #0d0d1a;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-bottom: 1px solid #0f3460;
+            padding: 15px 30px;
+        }
+        .navbar-brand {
+            color: #00d4ff !important;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .nav-link {
+            color: #a0a0c0 !important;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        .nav-link:hover {
+            color: #00d4ff !important;
+        }
+        .main-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .card-dark {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 1px solid #0f3460;
+            border-radius: 15px;
+            padding: 35px;
+            margin-bottom: 25px;
+        }
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border: none;
+            color: #0d0d1a;
+            font-weight: 600;
+            padding: 12px 35px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+        }
+        .form-control-dark {
+            background: #0d0d1a;
+            border: 1px solid #0f3460;
+            color: #e0e0e0;
+            border-radius: 8px;
+            padding: 12px 15px;
+        }
+        .form-control-dark:focus {
+            background: #0d0d1a;
+            border-color: #00d4ff;
+            color: #e0e0e0;
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        }
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            gap: 0;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .step-active .step-circle {
+            background: #00d4ff;
+            color: #0d0d1a;
+        }
+        .step-done .step-circle {
+            background: #00a86b;
+            color: white;
+        }
+        .step-inactive .step-circle {
+            background: #1a1a2e;
+            border: 2px solid #0f3460;
+            color: #a0a0c0;
+        }
+        .step-label {
+            font-size: 0.85rem;
+            color: #a0a0c0;
+        }
+        .step-active .step-label {
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        .step-line {
+            width: 60px;
+            height: 2px;
+            background: #0f3460;
+            margin: 0 10px;
+            align-self: center;
+        }
+        .severity-low {
+            color: #00a86b;
+            font-weight: 700;
+        }
+        .severity-moderate {
+            color: #ffa500;
+            font-weight: 700;
+        }
+        .severity-high {
+            color: #ff4444;
+            font-weight: 700;
+        }
+        .result-card {
+            background: #0d0d1a;
+            border: 1px solid #0f3460;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00d4ff;
+        }
+        .result-label {
+            font-size: 0.85rem;
+            color: #a0a0c0;
+            margin-top: 5px;
+        }
+        label {
+            color: #a0a0c0;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        h2, h3, h4 {
+            color: #00d4ff;
+        }
+        .page-title {
+            color: #00d4ff;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .page-subtitle {
+            color: #a0a0c0;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-brain me-2"></i>NeuroScan AI
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/"><i class="fas fa-home me-1"></i>Home</a>
+                <a class="nav-link" href="/register"><i class="fas fa-user-plus me-1"></i>New Scan</a>
+                <a class="nav-link" href="/history"><i class="fas fa-history me-1"></i>History</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

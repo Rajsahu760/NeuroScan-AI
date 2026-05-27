@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Registration - NeuroScan AI{% endblock %}
+
+{% block content %}
+
+<!-- Step Indicator -->
+<div class="step-indicator">
+    <div class="step step-active">
+        <div class="step-circle">1</div>
+        <div class="step-label">Patient Info</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step step-inactive">
+        <div class="step-circle">2</div>
+        <div class="step-label">Upload MRI</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step step-inactive">
+        <div class="step-circle">3</div>
+        <div class="step-label">Results</div>
+    </div>
+</div>
+
+<!-- Registration Form -->
+<div class="card-dark">
+    <h2 class="page-title"><i class="fas fa-user-plus me-2"></i>Patient Registration</h2>
+    <p class="page-subtitle">Enter patient details to proceed with MRI analysis</p>
+
+    <form method="POST" action="/register">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <label>Full Name</label>
+                <input type="text" name="name" class="form-control form-control-dark" 
+                       placeholder="Enter patient full name" required>
+            </div>
+            <div class="col-md-6 mb-4">
+                <label>Age</label>
+                <input type="number" name="age" class="form-control form-control-dark" 
+                       placeholder="Enter age" min="1" max="120" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <label>Gender</label>
+                <select name="gender" class="form-control form-control-dark" required>
+                    <option value="" disabled selected>Select gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="col-md-6 mb-4">
+                <label>Mobile Number</label>
+                <input type="tel" name="mobile" class="form-control form-control-dark" 
+                       placeholder="Enter mobile number" required>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-primary-custom btn-lg">
+                <i class="fas fa-arrow-right me-2"></i>Next — Upload MRI
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

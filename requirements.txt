@@ -1,0 +1,9 @@
+flask
+flask-sqlalchemy
+torch
+torchvision
+nibabel
+numpy
+matplotlib
+reportlab
+Pillow

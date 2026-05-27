@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Results - NeuroScan AI{% endblock %}
+
+{% block content %}
+
+<!-- Step Indicator -->
+<div class="step-indicator">
+    <div class="step step-done">
+        <div class="step-circle"><i class="fas fa-check"></i></div>
+        <div class="step-label">Patient Info</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step step-done">
+        <div class="step-circle"><i class="fas fa-check"></i></div>
+        <div class="step-label">Upload MRI</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step step-active">
+        <div class="step-circle">3</div>
+        <div class="step-label">Results</div>
+    </div>
+</div>
+
+<!-- Patient Info Banner -->
+<div class="card-dark" style="padding: 20px 35px; margin-bottom: 20px;">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h5 style="color: #e0e0e0; margin: 0;">
+                <i class="fas fa-user-circle me-2" style="color: #00d4ff;"></i>
+                {{ patient.name }}
+            </h5>
+            <small style="color: #a0a0c0;">
+                Age: {{ patient.age }} &nbsp;|&nbsp;
+                Gender: {{ patient.gender }} &nbsp;|&nbsp;
+                Scan Date: {{ scan.scan_date.strftime('%d %b %Y, %I:%M %p') }}
+            </small>
+        </div>
+        <div class="col-md-4 text-end">
+            <span style="color: #00a86b; font-size: 0.85rem;">
+                <i class="fas fa-check-circle me-1"></i>Analysis Complete
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Severity Card -->
+<div class="card-dark text-center mb-4">
+    {% if result.severity_level == 1 %}
+        <i class="fas fa-shield-alt" style="font-size: 3rem; color: #00a86b;"></i>
+        <h2 class="mt-3" style="color: #00a86b;">Low Risk</h2>
+        <p style="color: #a0a0c0;">Early stage tumor detected. Regular monitoring recommended.</p>
+    {% elif result.severity_level == 2 %}
+        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #ffa500;"></i>
+        <h2 class="mt-3" style="color: #ffa500;">Moderate Risk</h2>
+        <p style="color: #a0a0c0;">Intermediate stage tumor detected. Medical consultation advised.</p>
+    {% else %}
+        <i class="fas fa-radiation" style="font-size: 3rem; color: #ff4444;"></i>
+        <h2 class="mt-3" style="color: #ff4444;">High Risk</h2>
+        <p style="color: #a0a0c0;">Advanced stage tumor detected. Immediate medical attention required.</p>
+    {% endif %}
+</div>
+
+<!-- Stats Row -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="result-card">
+            <div class="result-value">{{ result.severity_level }}</div>
+            <div class="result-label">Severity Level</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="result-card">
+            <div class="result-value">{{ result.tumor_volume }}</div>
+            <div class="result-label">Tumor Volume (cm³)</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="result-card">
+            <div class="result-value" style="font-size: 1.5rem;">{{ result.severity_label }}</div>
+            <div class="result-label">Risk Assessment</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="result-card">
+            <div class="result-value">82%</div>
+            <div class="result-label">Model Accuracy</div>
+        </div>
+    </div>
+</div>
+
+<!-- Dice Scores -->
+{% if result.dice_wt %}
+<div class="card-dark mb-4">
+    <h3 class="mb-4"><i class="fas fa-chart-bar me-2"></i>Dice Scores</h3>
+    <div class="row text-center">
+        <div class="col-md-3">
+            <div class="result-card">
+                <div class="result-value" style="color: #ff6b6b;">{{ result.dice_wt }}%</div>
+                <div class="result-label">Whole Tumor (WT)</div>
+                <div class="progress mt-2" style="background: #0d0d1a; height: 6px; border-radius: 3px;">
+                    <div class="progress-bar" style="width: {{ result.dice_wt }}%; background: #ff6b6b;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="result-card">
+                <div class="result-value" style="color: #6b9fff;">{{ result.dice_tc }}%</div>
+                <div class="result-label">Tumor Core (TC)</div>
+                <div class="progress mt-2" style="background: #0d0d1a; height: 6px; border-radius: 3px;">
+                    <div class="progress-bar" style="width: {{ result.dice_tc }}%; background: #6b9fff;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="result-card">
+                <div class="result-value" style="color: #6bff9f;">{{ result.dice_et }}%</div>
+                <div class="result-label">Enhancing Tumor (ET)</div>
+                <div class="progress mt-2" style="background: #0d0d1a; height: 6px; border-radius: 3px;">
+                    <div class="progress-bar" style="width: {{ result.dice_et }}%; background: #6bff9f;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="result-card">
+                <div class="result-value" style="color: #00d4ff;">{{ result.average_dice }}%</div>
+                <div class="result-label">Average Dice</div>
+                <div class="progress mt-2" style="background: #0d0d1a; height: 6px; border-radius: 3px;">
+                    <div class="progress-bar" style="width: {{ result.average_dice }}%; background: #00d4ff;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Prediction Image -->
+<div class="card-dark">
+    <h3 class="mb-4"><i class="fas fa-image me-2"></i>Segmentation Results</h3>
+    <img src="/static/results/{{ result.prediction_image }}" 
+         alt="Segmentation Result" 
+         style="width: 100%; border-radius: 10px; border: 1px solid #0f3460;">
+    <div class="row mt-3 text-center">
+        <div class="col-md-4">
+            <span style="display: inline-block; width: 15px; height: 15px; 
+                         background: #ff6b6b; border-radius: 3px; margin-right: 8px;"></span>
+            <span style="color: #a0a0c0;">Whole Tumor (WT)</span>
+        </div>
+        <div class="col-md-4">
+            <span style="display: inline-block; width: 15px; height: 15px; 
+                         background: #6b9fff; border-radius: 3px; margin-right: 8px;"></span>
+            <span style="color: #a0a0c0;">Tumor Core (TC)</span>
+        </div>
+        <div class="col-md-4">
+            <span style="display: inline-block; width: 15px; height: 15px; 
+                         background: #6bff9f; border-radius: 3px; margin-right: 8px;"></span>
+            <span style="color: #a0a0c0;">Enhancing Tumor (ET)</span>
+        </div>
+    </div>
+</div>
+
+<!-- Action Buttons -->
+<div class="text-center mt-4 mb-4">
+    <a href="/download_report/{{ result.id }}" class="btn btn-primary-custom btn-lg me-3">
+        <i class="fas fa-file-pdf me-2"></i>Download PDF Report
+    </a>
+    <a href="/register" class="btn btn-lg me-3"
+       style="border: 1px solid #00d4ff; color: #00d4ff; padding: 12px 35px; border-radius: 8px;">
+        <i class="fas fa-plus-circle me-2"></i>New Scan
+    </a>
+    <a href="/history" class="btn btn-lg"
+       style="border: 1px solid #0f3460; color: #a0a0c0; padding: 12px 35px; border-radius: 8px;">
+        <i class="fas fa-history me-2"></i>View History
+    </a>
+</div>
+
+{% endblock %}hhh

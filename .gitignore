@@ -1,0 +1,34 @@
+# Model file (118MB - too large)
+models/best_model.pth
+
+# Dataset (13GB)
+data/
+
+# Database (patient data private)
+database/tumor_detection.db
+
+# Uploaded MRI files
+static/uploads/
+
+# Result images
+static/results/
+
+# PDF reports
+static/reports/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment
+.env
+venv/
+env/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Jupyter checkpoints
+.ipynb_checkpoints/

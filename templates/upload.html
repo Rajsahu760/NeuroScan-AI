@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Upload MRI - NeuroScan AI{% endblock %}
+
+{% block content %}
+
+<!-- Step Indicator -->
+<div class="step-indicator">
+    <div class="step step-done">
+        <div class="step-circle"><i class="fas fa-check"></i></div>
+        <div class="step-label">Patient Info</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step step-active">
+        <div class="step-circle">2</div>
+        <div class="step-label">Upload MRI</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step step-inactive">
+        <div class="step-circle">3</div>
+        <div class="step-label">Results</div>
+    </div>
+</div>
+
+<!-- Patient Info Banner -->
+<div class="card-dark" style="padding: 20px 35px; margin-bottom: 20px;">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h5 style="color: #e0e0e0; margin: 0;">
+                <i class="fas fa-user-circle me-2" style="color: #00d4ff;"></i>
+                {{ patient.name }}
+            </h5>
+            <small style="color: #a0a0c0;">
+                Age: {{ patient.age }} &nbsp;|&nbsp; 
+                Gender: {{ patient.gender }} &nbsp;|&nbsp; 
+                Mobile: {{ patient.mobile }}
+            </small>
+        </div>
+        <div class="col-md-4 text-end">
+            <span style="color: #00a86b; font-size: 0.85rem;">
+                <i class="fas fa-check-circle me-1"></i>Patient Registered
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Upload Form -->
+<div class="card-dark">
+    <h2 class="page-title"><i class="fas fa-upload me-2"></i>Upload MRI Files</h2>
+    <p class="page-subtitle">Upload all 4 MRI modalities in .nii or .nii.gz format</p>
+
+    <form method="POST" enctype="multipart/form-data" id="uploadForm">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <label><i class="fas fa-file-medical me-1"></i> FLAIR Modality</label>
+                <input type="file" name="flair" class="form-control form-control-dark" 
+                       accept=".gz,.nii" required>
+                <small style="color: #a0a0c0;">File: *_flair.nii.gz</small>
+            </div>
+            <div class="col-md-6 mb-4">
+                <label><i class="fas fa-file-medical me-1"></i> T1 Modality</label>
+                <input type="file" name="t1" class="form-control form-control-dark" 
+                       accept=".gz,.nii" required>
+                <small style="color: #a0a0c0;">File: *_t1.nii.gz</small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <label><i class="fas fa-file-medical me-1"></i> T1ce Modality</label>
+                <input type="file" name="t1ce" class="form-control form-control-dark" 
+                       accept=".gz,.nii" required>
+                <small style="color: #a0a0c0;">File: *_t1ce.nii.gz</small>
+            </div>
+            <div class="col-md-6 mb-4">
+                <label><i class="fas fa-file-medical me-1"></i> T2 Modality</label>
+                <input type="file" name="t2" class="form-control form-control-dark" 
+                       accept=".gz,.nii" required>
+                <small style="color: #a0a0c0;">File: *_t2.nii.gz</small>
+            </div>
+        </div>
+
+        <!-- Processing Animation (hidden by default) -->
+        <div id="processingDiv" style="display: none; text-align: center; padding: 30px;">
+            <div class="spinner-border" style="color: #00d4ff; width: 3rem; height: 3rem;" role="status"></div>
+            <h4 style="color: #00d4ff; margin-top: 20px;">Analyzing MRI...</h4>
+            <p style="color: #a0a0c0;">AI model is processing your scan. Please wait...</p>
+            <div class="progress mt-3" style="background: #0d0d1a; border-radius: 10px;">
+                <div id="progressBar" class="progress-bar" role="progressbar" 
+                     style="width: 0%; background: linear-gradient(135deg, #00d4ff, #0099cc); border-radius: 10px;">
+                </div>
+            </div>
+        </div>
+
+        <div id="submitDiv" class="text-center mt-3">
+            <button type="submit" class="btn btn-primary-custom btn-lg" id="submitBtn">
+                <i class="fas fa-brain me-2"></i>Analyze MRI
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('uploadForm').addEventListener('submit', function() {
+        document.getElementById('submitDiv').style.display = 'none';
+        document.getElementById('processingDiv').style.display = 'block';
+
+        // Fake progress bar animation
+        let progress = 0;
+        const interval = setInterval(function() {
+            progress += Math.random() * 8;
+            if (progress > 90) progress = 90;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }, 500);
+    });
+</script>
+{% endblock %}

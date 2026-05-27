@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}History - NeuroScan AI{% endblock %}
+
+{% block content %}
+
+<h2 class="page-title"><i class="fas fa-history me-2"></i>Patient History</h2>
+<p class="page-subtitle">All previous scans and results</p>
+
+<!-- Search Bar -->
+<div class="card-dark mb-4" style="padding: 20px 35px;">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <input type="text" id="searchInput" class="form-control form-control-dark" 
+                   placeholder="Search by patient name..." onkeyup="searchPatients()">
+        </div>
+        <div class="col-md-4 text-end">
+            <span style="color: #a0a0c0;">Total: {{ patients|length }} patients</span>
+        </div>
+    </div>
+</div>
+
+{% if patients %}
+<div class="card-dark">
+    <table class="table" id="patientsTable" style="color: #e0e0e0;">
+        <thead>
+            <tr style="border-bottom: 1px solid #0f3460;">
+                <th style="color: #00d4ff;">ID</th>
+                <th style="color: #00d4ff;">Name</th>
+                <th style="color: #00d4ff;">Age</th>
+                <th style="color: #00d4ff;">Gender</th>
+                <th style="color: #00d4ff;">Mobile</th>
+                <th style="color: #00d4ff;">Date</th>
+                <th style="color: #00d4ff;">Severity</th>
+                <th style="color: #00d4ff;">Action</th>
+            </tr>
+        </thead>
+        <tbody id="patientsBody">
+            {% for patient in patients %}
+            <tr style="border-bottom: 1px solid #0f3460;">
+                <td>#{{ patient.id }}</td>
+                <td>{{ patient.name }}</td>
+                <td>{{ patient.age }}</td>
+                <td>{{ patient.gender }}</td>
+                <td>{{ patient.mobile }}</td>
+                <td>{{ patient.created_at.strftime('%d %b %Y') }}</td>
+                <td>
+                    {% if patient.scans %}
+                        {% set last_result = patient.scans[-1].results %}
+                        {% if last_result %}
+                            {% if last_result[-1].severity_level == 1 %}
+                                <span style="color: #00a86b; font-weight: 600;">Low Risk</span>
+                            {% elif last_result[-1].severity_level == 2 %}
+                                <span style="color: #ffa500; font-weight: 600;">Moderate</span>
+                            {% else %}
+                                <span style="color: #ff4444; font-weight: 600;">High Risk</span>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if patient.scans %}
+                        {% set last_scan = patient.scans[-1] %}
+                        {% if last_scan.results %}
+                            <a href="/results/{{ last_scan.results[-1].id }}" 
+                               class="btn btn-sm" 
+                               style="background: #0f3460; color: #00d4ff; border-radius: 6px;">
+                                <i class="fas fa-eye me-1"></i>View
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                    <a href="/upload/{{ patient.id }}" 
+                       class="btn btn-sm ms-1"
+                       style="background: #00d4ff; color: #0d0d1a; border-radius: 6px; font-weight: 600;">
+                        <i class="fas fa-plus me-1"></i>New Scan
+                    </a>
+                    <!-- DELETE BUTTON - NAYA -->
+                    <form action="/delete_patient/{{ patient.id }}" 
+                          method="POST" 
+                          style="display:inline;"
+                          onsubmit="return confirmDelete('{{ patient.name }}')">
+                        <button type="submit" class="btn btn-sm ms-1"
+                                style="background: #ff4444; color: white; border-radius: 6px; font-weight: 600; border: none;">
+                            <i class="fas fa-trash me-1"></i>Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+<div class="card-dark text-center" style="padding: 60px;">
+    <i class="fas fa-folder-open" style="font-size: 3rem; color: #0f3460;"></i>
+    <h4 style="color: #a0a0c0; margin-top: 20px;">No patients found</h4>
+    <p style="color: #a0a0c0;">Start by registering a new patient</p>
+    <a href="/register" class="btn btn-primary-custom mt-3">
+        <i class="fas fa-plus-circle me-2"></i>New Scan
+    </a>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function searchPatients() {
+    const input  = document.getElementById('searchInput').value.toLowerCase();
+    const rows   = document.getElementById('patientsBody').getElementsByTagName('tr');
+    
+    for (let row of rows) {
+        const name = row.getElementsByTagName('td')[1].textContent.toLowerCase();
+        row.style.display = name.includes(input) ? '' : 'none';
+    }
+}
+
+// DELETE CONFIRM POPUP - NAYA
+function confirmDelete(patientName) {
+    return confirm('⚠️ DELETE PATIENT?\n\nPatient: ' + patientName + '\n\nAll records including scans, results and reports will be permanently deleted.\nThis action cannot be undone.\n\nAre you sure you want to proceed?');
+}
+</script>
+{% endblock %}

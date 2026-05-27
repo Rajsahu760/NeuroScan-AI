@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}NeuroScan AI - Brain Tumor Detection{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<div class="card-dark text-center" style="padding: 60px 35px;">
+    <i class="fas fa-brain" style="font-size: 4rem; color: #00d4ff; margin-bottom: 20px;"></i>
+    <h1 class="page-title" style="font-size: 2.5rem;">NeuroScan AI</h1>
+    <p class="page-subtitle" style="font-size: 1.1rem;">
+        Advanced Brain Tumor Segmentation using Deep Learning
+    </p>
+    <p style="color: #a0a0c0; max-width: 600px; margin: 0 auto 30px;">
+        Upload MRI scans and get instant AI-powered tumor detection with 
+        severity assessment and detailed reports.
+    </p>
+    <a href="/register" class="btn btn-primary-custom btn-lg">
+        <i class="fas fa-plus-circle me-2"></i>Start New Scan
+    </a>
+    <a href="/history" class="btn ms-3" style="border: 1px solid #0f3460; color: #a0a0c0; padding: 12px 35px; border-radius: 8px;">
+        <i class="fas fa-history me-2"></i>View History
+    </a>
+</div>
+
+<!-- Live Dashboard Stats -->
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="result-card">
+            <div class="result-value">{{ stats.total_patients }}</div>
+            <div class="result-label">Total Patients</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="result-card">
+            <div class="result-value">{{ stats.total_scans }}</div>
+            <div class="result-label">Total Scans</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="result-card">
+            <div class="result-value">{{ stats.high_risk }}</div>
+            <div class="result-label">High Risk Cases</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="result-card">
+            <div class="result-value">82%</div>
+            <div class="result-label">Model Accuracy</div>
+        </div>
+    </div>
+</div>
+
+<!-- Model Stats -->
+<div class="row mt-3">
+    <div class="col-md-3">
+        <div class="result-card">
+            <div class="result-value">1251</div>
+            <div class="result-label">Training Patients</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="result-card">
+            <div class="result-value">3</div>
+            <div class="result-label">Tumor Regions</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="result-card">
+            <div class="result-value">U-Net</div>
+            <div class="result-label">Architecture</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="result-card">
+            <div class="result-value">31M</div>
+            <div class="result-label">Parameters</div>
+        </div>
+    </div>
+</div>
+
+<!-- How it works -->
+<div class="card-dark mt-4">
+    <h3 class="mb-4"><i class="fas fa-info-circle me-2"></i>How It Works</h3>
+    <div class="row text-center">
+        <div class="col-md-4">
+            <i class="fas fa-user-plus" style="font-size: 2rem; color: #00d4ff;"></i>
+            <h5 style="color: #e0e0e0; margin-top: 15px;">Step 1</h5>
+            <p style="color: #a0a0c0;">Enter patient details — name, age, gender and mobile number</p>
+        </div>
+        <div class="col-md-4">
+            <i class="fas fa-upload" style="font-size: 2rem; color: #00d4ff;"></i>
+            <h5 style="color: #e0e0e0; margin-top: 15px;">Step 2</h5>
+            <p style="color: #a0a0c0;">Upload 4 MRI modalities — FLAIR, T1, T1ce, T2</p>
+        </div>
+        <div class="col-md-4">
+            <i class="fas fa-chart-bar" style="font-size: 2rem; color: #00d4ff;"></i>
+            <h5 style="color: #e0e0e0; margin-top: 15px;">Step 3</h5>
+            <p style="color: #a0a0c0;">Get instant results — tumor regions, severity level and report</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}s
